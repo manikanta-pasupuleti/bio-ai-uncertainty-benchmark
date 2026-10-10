@@ -110,7 +110,7 @@ dataset, trial count, alpha value, and stress-test level alongside exported CSV 
 If you use this project in a report or presentation, cite it as:
 
 ```text
-Pasupuleti, Manikanta. Medical Uncertainty Benchmark:
+Medical Uncertainty Benchmark:
 Robustness and Uncertainty Quantification in Small-Data Biomedical Classification.
 GitHub repository, 2026.
 ```
