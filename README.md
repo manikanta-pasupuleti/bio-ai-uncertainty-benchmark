@@ -114,3 +114,10 @@ Pasupuleti, Manikanta. Medical Uncertainty Benchmark:
 Robustness and Uncertainty Quantification in Small-Data Biomedical Classification.
 GitHub repository, 2026.
 ```
+
+## Author
+
+**Manikanta Pasupuleti**
+
+- Email: [manikantapasupuleti17@gmail.com](mailto:manikantapasupuleti17@gmail.com)
+- LinkedIn: [linkedin.com/in/pmanii](https://www.linkedin.com/in/pmanii)
