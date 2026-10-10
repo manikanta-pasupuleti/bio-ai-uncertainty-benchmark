@@ -11,6 +11,21 @@ from src.data.splitting import train_calibration_test_split
 from src.experiments.robustness import add_noise, apply_covariate_shift
 from src.models.classifiers import build_pipeline
 
+@st.cache_data(show_spinner="Preparing robustness experiment...")
+def prepare_robustness_experiment(dataset_name: str, alpha: float):
+    X, y = load_dataset(dataset_name)
+    X_train, X_cal, X_test, y_train, y_cal, y_test = train_calibration_test_split(
+        X, y, train_fraction=0.5, calibration_fraction=0.2, random_state=42
+    )
+    preprocessor = make_preprocessor(X_train, scale_numeric=True)
+    model = build_pipeline("logistic_regression", preprocessor, random_state=42)
+    model.fit(X_train, y_train)
+    cal_prob = model.predict_proba(X_cal)
+    conformal = SplitConformalClassifier(alpha=alpha).fit(
+        np.asarray(X_cal), np.asarray(y_cal), np.asarray(cal_prob)
+    )
+    return model, conformal, X_test, y_test
+
 st.title("Robustness Analysis")
 st.caption("Stress-test empirical coverage and accuracy under controlled feature perturbations.")
 st.markdown(
@@ -36,20 +51,12 @@ alpha = st.slider("Conformal alpha", 0.01, 0.3, 0.1, 0.01)
 
 if st.button("Run robustness sweep"):
     with st.spinner("Running controlled stress test..."):
-        X, y = load_dataset(dataset_name)
-        X_train, X_cal, X_test, y_train, y_cal, y_test = train_calibration_test_split(
-            X, y, train_fraction=0.5, calibration_fraction=0.2, random_state=42
-        )
-        preprocessor = make_preprocessor(X_train, scale_numeric=True)
-        model = build_pipeline("logistic_regression", preprocessor, random_state=42)
-        model.fit(X_train, y_train)
-        cal_prob = model.predict_proba(X_cal)
-        conformal = SplitConformalClassifier(alpha=alpha).fit(
-            np.asarray(X_cal), np.asarray(y_cal), np.asarray(cal_prob)
-        )
+        model, conformal, X_test, y_test = prepare_robustness_experiment(dataset_name, alpha)
 
         rows = []
-        for level in np.arange(levels[0], levels[1] + 0.001, 0.05):
+        stress_levels = np.arange(levels[0], levels[1] + 0.001, 0.05)
+        progress = st.progress(0, text="Evaluating stress levels...")
+        for index, level in enumerate(stress_levels):
             stressed = X_test.to_numpy(dtype=float)
             if stress_type == "Feature noise":
                 stressed = add_noise(stressed, noise_level=float(level), random_state=42)
@@ -65,7 +72,12 @@ if st.button("Run robustness sweep"):
                     "mean_set_size": float(np.mean([len(prediction_set) for prediction_set in sets])),
                 }
             )
+            progress.progress(
+                (index + 1) / len(stress_levels),
+                text=f"Evaluated stress level {index + 1} of {len(stress_levels)}",
+            )
         results = pd.DataFrame(rows)
+        progress.empty()
     st.success("Robustness sweep completed.")
     st.line_chart(results.set_index("stress_level")[["accuracy", "coverage"]])
     st.dataframe(results, hide_index=True, use_container_width=True)

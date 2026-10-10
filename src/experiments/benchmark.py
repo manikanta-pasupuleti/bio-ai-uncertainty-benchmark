@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from collections.abc import Callable
 
 import numpy as np
 import pandas as pd
@@ -14,7 +15,12 @@ from src.conformal.icp import SplitConformalClassifier
 from src.conformal.metrics import accuracy_score, brier_score, expected_calibration_error
 
 
-def run_benchmark(dataset_name: str = "breast_cancer", n_trials: int = 1, alpha: float = 0.1) -> pd.DataFrame:
+def run_benchmark(
+    dataset_name: str = "breast_cancer",
+    n_trials: int = 1,
+    alpha: float = 0.1,
+    progress_callback: Callable[[int, int], None] | None = None,
+) -> pd.DataFrame:
     X, y = load_dataset(dataset_name)
     rows = []
     for trial in range(n_trials):
@@ -55,6 +61,8 @@ def run_benchmark(dataset_name: str = "breast_cancer", n_trials: int = 1, alpha:
                 "mean_set_size": float(np.mean([len(s) for s in prediction_sets])),
             }
         )
+        if progress_callback is not None:
+            progress_callback(trial + 1, n_trials)
 
     result = pd.DataFrame(rows)
     output_dir = Path(__file__).resolve().parents[2] / "results" / "tables"

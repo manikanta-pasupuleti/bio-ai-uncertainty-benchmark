@@ -121,3 +121,8 @@ GitHub repository, 2026.
 
 - Email: [manikantapasupuleti17@gmail.com](mailto:manikantapasupuleti17@gmail.com)
 - LinkedIn: [linkedin.com/in/pmanii](https://www.linkedin.com/in/pmanii)
+
+## Presentation guide
+
+See [docs/PRESENTATION_GUIDE.md](docs/PRESENTATION_GUIDE.md) for the demo script,
+slide structure, and viva questions with suggested answers.

@@ -9,12 +9,16 @@ st.title("Benchmark Results")
 st.caption("Compare predictive quality, calibration, and uncertainty-set behavior across completed trials.")
 results_dir = Path(__file__).resolve().parents[1] / "results" / "tables"
 
+@st.cache_data(show_spinner=False)
+def read_results(path: str) -> pd.DataFrame:
+    return pd.read_csv(path)
+
 csv_files = sorted(results_dir.glob("*_benchmark.csv")) if results_dir.exists() else []
 if not csv_files:
     st.info("No benchmark CSV files are available yet. Run the benchmark script to generate them.")
 else:
     selected_file = st.selectbox("Result file", [path.name for path in csv_files])
-    df = pd.read_csv(results_dir / selected_file)
+    df = read_results(str(results_dir / selected_file))
     st.dataframe(df, use_container_width=True)
     target_coverage = 1 - float(df["alpha"].iloc[0])
     summary = pd.DataFrame(

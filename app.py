@@ -36,8 +36,19 @@ with st.sidebar:
 
 if run_button:
     try:
-        with st.spinner("Running benchmark..."):
-            result = run_benchmark(dataset_name=dataset_name, n_trials=n_trials, alpha=alpha)
+        progress = st.progress(0, text="Preparing benchmark...")
+
+        def update_progress(completed: int, total: int) -> None:
+            progress.progress(completed / total, text=f"Completed trial {completed} of {total}")
+
+        with st.spinner("Training models and evaluating uncertainty..."):
+            result = run_benchmark(
+                dataset_name=dataset_name,
+                n_trials=n_trials,
+                alpha=alpha,
+                progress_callback=update_progress,
+            )
+        progress.empty()
         st.success("Benchmark completed.")
         st.dataframe(result, use_container_width=True)
         st.download_button(
@@ -47,6 +58,8 @@ if run_button:
             mime="text/csv",
         )
     except Exception as exc:  # pragma: no cover - UI path only
+        if "progress" in locals():
+            progress.empty()
         st.error(f"The benchmark failed: {exc}")
 else:
     st.info("Use the sidebar to run the benchmark, or open the pages for dataset exploration and robustness analysis.")

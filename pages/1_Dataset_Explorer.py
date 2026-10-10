@@ -5,13 +5,17 @@ import pandas as pd
 
 from src.data.loader import load_dataset
 
+@st.cache_data(show_spinner="Loading dataset...")
+def load_dataset_cached(dataset_name: str):
+    return load_dataset(dataset_name)
+
 st.title("Dataset Explorer")
 st.caption("Inspect sample size, feature structure, and class balance before interpreting model results.")
 
 selected = st.selectbox("Dataset", ["breast_cancer", "heart_disease"])
 
 try:
-    X, y = load_dataset(selected)
+    X, y = load_dataset_cached(selected)
     metric_columns = st.columns(4)
     metric_columns[0].metric("Rows", f"{X.shape[0]:,}")
     metric_columns[1].metric("Features", f"{X.shape[1]:,}")
