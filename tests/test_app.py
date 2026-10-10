@@ -8,6 +8,7 @@ def test_benchmark_smoke() -> None:
     assert list(result.columns) == [
         "dataset",
         "trial",
+        "model",
         "alpha",
         "accuracy",
         "brier",
@@ -18,4 +19,5 @@ def test_benchmark_smoke() -> None:
         "conformal_coverage",
         "mean_set_size",
     ]
-    assert len(result) == 1
+    assert set(result["model"]) == {"logistic_regression", "random_forest", "svm"}
+    assert len(result) == 3

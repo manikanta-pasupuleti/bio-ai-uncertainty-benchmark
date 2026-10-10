@@ -20,7 +20,8 @@ Open the deployed Streamlit application:
 The dashboard includes:
 
 - Dataset Explorer for sample size, feature structure, missingness, and class balance
-- Benchmark Results for accuracy, Brier score, ECE, coverage, and prediction-set size
+- Benchmark Results for model comparison across logistic regression, random forest,
+  and SVM using accuracy, Brier score, ECE, coverage, and prediction-set size
 - Robustness Analysis for feature noise and covariate-shift experiments
 - Prediction Demo for inspecting individual uncertainty outputs
 

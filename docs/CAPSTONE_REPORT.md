@@ -43,8 +43,9 @@ calibration partition is not used to fit the base classifier.
 
 ### Models and metrics
 
-The project supports logistic regression, random forest, and SVM pipelines. The
-current benchmark uses logistic regression as the primary baseline. It reports:
+The project evaluates logistic regression, random forest, and SVM pipelines. The
+dashboard compares their mean predictive and uncertainty metrics across trials.
+It reports:
 
 - Accuracy: fraction of correct top-label predictions
 - Brier score: squared probability error, where lower is better
