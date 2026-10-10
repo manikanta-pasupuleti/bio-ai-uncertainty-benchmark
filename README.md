@@ -126,3 +126,16 @@ GitHub repository, 2026.
 
 See [docs/PRESENTATION_GUIDE.md](docs/PRESENTATION_GUIDE.md) for the demo script,
 slide structure, and viva questions with suggested answers.
+
+## Final benchmark snapshot
+
+Five trials with alpha `0.10` produced:
+
+| Dataset | Accuracy | Coverage | Mean set size |
+|---|---:|---:|---:|
+| Breast Cancer | 0.9982 | 0.9947 | 1.0000 |
+| Heart Disease | 0.8279 | 0.9361 | 1.4033 |
+
+The full academic write-up is available in
+[docs/CAPSTONE_REPORT.md](docs/CAPSTONE_REPORT.md), and the slide-ready version is
+in [docs/PRESENTATION_SLIDES.md](docs/PRESENTATION_SLIDES.md).

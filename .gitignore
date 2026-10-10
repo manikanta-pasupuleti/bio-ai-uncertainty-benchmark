@@ -9,3 +9,4 @@ __pycache__/
 results/tables/*.csv
 results/figures/*.png
 results/reports/*.html
+data/raw/*.csv

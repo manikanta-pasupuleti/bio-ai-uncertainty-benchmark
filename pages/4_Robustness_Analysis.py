@@ -17,6 +17,9 @@ def prepare_robustness_experiment(dataset_name: str, alpha: float):
     X_train, X_cal, X_test, y_train, y_cal, y_test = train_calibration_test_split(
         X, y, train_fraction=0.5, calibration_fraction=0.2, random_state=42
     )
+    X_train = pd.DataFrame(X_train, columns=X.columns)
+    X_cal = pd.DataFrame(X_cal, columns=X.columns)
+    X_test = pd.DataFrame(X_test, columns=X.columns)
     preprocessor = make_preprocessor(X_train, scale_numeric=True)
     model = build_pipeline("logistic_regression", preprocessor, random_state=42)
     model.fit(X_train, y_train)

@@ -15,7 +15,6 @@ def calibrate_predictions(model: Any, X_cal: Any, y_cal: Any, method: str = "sig
     calibrator = CalibratedClassifierCV(
         estimator=FrozenEstimator(model),
         method=method,
-        cv="prefit",
     )
     calibrator.fit(X_cal, y_cal)
     return calibrator
